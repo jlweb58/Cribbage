@@ -8,7 +8,7 @@ package com.webber.cribbage.model;
  * @author John
  *
  */
-public class Card {
+public class Card implements Comparable<Card>{
 
   private final Suit suit;
 
@@ -30,6 +30,11 @@ public class Card {
   @Override
   public String toString() {
     return "[" + rank + " of " + suit + "]";
+  }
+
+  @Override
+  public int compareTo(Card o) {
+    return this.getRank().ordinal() - o.getRank().ordinal();
   }
 
 }

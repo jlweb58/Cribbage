@@ -1,6 +1,8 @@
 package com.webber.cribbage.model.impl;
 
 import static com.webber.cribbage.model.Rank.*;
+import static com.webber.cribbage.model.Suit.CLUBS;
+import static com.webber.cribbage.model.Suit.DIAMONDS;
 import static com.webber.cribbage.model.Suit.HEARTS;
 import static com.webber.cribbage.model.Suit.SPADES;
 import static org.junit.Assert.assertEquals;
@@ -124,14 +126,13 @@ public class HandCounterImplTest {
     assertCount(2);
   }
 
-  //FIXME - after pairs are implemented this will have to be updated.
   @Test
   public void testHandTwoThreeCardFifteens() {
     hand.addCard(new Card(SPADES, THREE));
     hand.addCard(new Card(SPADES, FOUR));
     hand.addCard(new Card(SPADES, EIGHT));
     hand.addCard(new Card(HEARTS, THREE));
-    assertCount(4);
+    assertCount(6);
   }
 
   @Test
@@ -143,19 +144,99 @@ public class HandCounterImplTest {
     assertCount(2);
   }
   
-  //FIXME - only correct as long as just fifteens are counted.
   @Test
-  public void testHandFiveCardFifteen() {
-    hand = new Hand(5);
+  public void testHandFiveCardFifteenPlusPair() {
     hand.addCard(new Card(SPADES, TWO));
     hand.addCard(new Card(SPADES, FOUR));
     hand.addCard(new Card(SPADES, SIX));
     hand.addCard(new Card(HEARTS, ACE));
-    hand.addCard(new Card(HEARTS, TWO));
-    assertCount(2);
-
+    Card cutCard = new Card(HEARTS, TWO);
+    assertEquals(4, handCounter.getHandCount(hand, cutCard));
   }
 
+  @Test
+  public void testCountThreeCardRun() {
+    hand.addCard(new Card(SPADES, TEN));
+    hand.addCard(new Card(SPADES, JACK));
+    hand.addCard(new Card(SPADES, QUEEN));
+    hand.addCard(new Card(HEARTS, ACE));
+    assertCount(3);
+  }
+  
+  @Test
+  public void testCountFourCardRun() {
+    hand.addCard(new Card(SPADES, TEN));
+    hand.addCard(new Card(SPADES, JACK));
+    hand.addCard(new Card(SPADES, QUEEN));
+    hand.addCard(new Card(HEARTS, KING));
+    assertCount(4);
+  }
+
+  @Test
+  public void testCountThreeCardDoubleRun() {
+    hand.addCard(new Card(SPADES, TEN));
+    hand.addCard(new Card(SPADES, JACK));
+    hand.addCard(new Card(SPADES, QUEEN));
+    hand.addCard(new Card(HEARTS, TEN));
+    assertCount(8);
+  }
+
+  @Test
+  public void testCountTwoPairs() {
+    hand.addCard(new Card(SPADES, TEN));
+    hand.addCard(new Card(SPADES, NINE));
+    hand.addCard(new Card(HEARTS, NINE));
+    hand.addCard(new Card(HEARTS, TEN));
+    assertCount(4);
+  }
+
+  @Test
+  public void testCountThreeOfAKind() {
+    hand.addCard(new Card(DIAMONDS, NINE));
+    hand.addCard(new Card(SPADES, NINE));
+    hand.addCard(new Card(HEARTS, NINE));
+    hand.addCard(new Card(HEARTS, TEN));
+    assertCount(6);
+  }
+
+  @Test
+  public void testCountFourOfAKind() {
+    hand.addCard(new Card(DIAMONDS, NINE));
+    hand.addCard(new Card(SPADES, NINE));
+    hand.addCard(new Card(HEARTS, NINE));
+    hand.addCard(new Card(CLUBS, NINE));
+    assertCount(12);
+  }
+
+  @Test
+  public void testCountFourFlush() {
+    hand.addCard(new Card(SPADES, ACE));
+    hand.addCard(new Card(SPADES, TWO));
+    hand.addCard(new Card(SPADES, FOUR));
+    hand.addCard(new Card(SPADES, SIX));
+    assertCount(4);
+  }
+  
+  @Test
+  public void testCountFiveFlush() {
+    hand.addCard(new Card(SPADES, ACE));
+    hand.addCard(new Card(SPADES, TWO));
+    hand.addCard(new Card(SPADES, FOUR));
+    hand.addCard(new Card(SPADES, SIX));
+    Card cutCard = new Card(SPADES, SEVEN);
+    assertEquals(7, handCounter.getHandCount(hand, cutCard));
+  }
+
+  @Test
+  public void testCountNibs() {
+    Card cutCard = new Card(SPADES, EIGHT);
+    hand.addCard(new Card(SPADES, JACK));
+    hand.addCard(new Card(SPADES, TWO));
+    hand.addCard(new Card(SPADES, FOUR));
+    hand.addCard(new Card(CLUBS, SIX));
+    assertEquals(1, handCounter.getHandCount(hand, cutCard));
+  }
+  
   private void assertCount(int expect) {
     assertEquals(expect, handCounter.getHandCount(hand));
   }

@@ -1,11 +1,14 @@
 package com.webber.cribbage.model.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.webber.cribbage.model.Card;
 import com.webber.cribbage.model.Hand;
 import com.webber.cribbage.model.HandCounter;
+import com.webber.cribbage.model.Rank;
+import com.webber.cribbage.model.Suit;
 
 /**
  * Created: 31.12.2014 14:39:35
@@ -25,14 +28,109 @@ public class HandCounterImpl implements HandCounter {
       countingHand.addCard(card);
     }
     countingHand.addCard(cutCard);
-    return getHandCount(countingHand);
+    int total = getHandCount(countingHand);
+    total += countNibs(hand, cutCard);
+    return total;
   }
 
   @Override
   public int getHandCount(Hand hand) {
     int total = 0;
     total += countFifteens(hand);
+    total += countRuns(hand);
+    total += countPairs(hand);
+    total += countFlush(hand);
     return total;
+  }
+  
+  private int countNibs(Hand hand, Card cutCard) {
+    for (Card card : hand.getUnplayedCards()) {
+      if (card.getRank().equals(Rank.JACK) && card.getSuit().equals(cutCard.getSuit())) {
+        return 1;
+      }
+    }
+    
+    return 0;
+  }
+  
+  private int countFlush(Hand hand) {
+    Suit lastSuit = null;
+    if (hand.getUnplayedCards().size() == 4) {
+      for (Card card : hand.getUnplayedCards()) {
+        if (lastSuit != null && card.getSuit().equals(lastSuit)) {
+          lastSuit = card.getSuit();
+        } else {
+          if (lastSuit != null) {
+            return 0;
+          } else {
+            lastSuit = card.getSuit();
+          }
+        }
+      }
+      return 4;
+    } else {
+      for (Card card : hand.getUnplayedCards()) {
+        if (lastSuit != null && card.getSuit().equals(lastSuit)) {
+          lastSuit = card.getSuit();
+        } else {
+          if (lastSuit != null) {
+            return 0;
+          } else {
+            lastSuit = card.getSuit();
+          }
+        }
+      }
+      return 5;
+    }
+  }
+
+  private int countPairs(Hand hand) {
+    int total = 0;
+    List<Card[]> twoCards = getTwoCardPermutations(hand);
+    for (Card[] pair : twoCards) {
+      if (pair[0].getRank().equals(pair[1].getRank())) {
+        total += TWO;
+      }
+    }
+    return total;
+  }
+
+  private int countRuns(Hand hand) {
+    int total = 0;
+    if (hand.getUnplayedCards().size() == 5) {
+      Card[] fiveCardSets = hand.getUnplayedCards().toArray(new Card[]{});
+      if (isRun(fiveCardSets)) {
+        return 5;
+      }
+    }
+    List<Card[]> fourCardSets = getFourCardPermutations(hand);
+    for (Card[] cards : fourCardSets) {
+      if (isRun(cards)) {
+        total += 4;
+      }
+    }
+    if (total > 0) {
+      return total;
+    }
+    List<Card[]> threeCardSets = getThreeCardPermutations(hand);
+    for (Card[] cards : threeCardSets) {
+      if (isRun(cards)) {
+        total += 3;
+      }
+    }
+    return total;
+  }
+
+  private boolean isRun(Card[] cards) {
+    Arrays.sort(cards);
+    int currentCount = cards[0].getRank().ordinal();
+    for (int i = 1; i < cards.length; i++) {
+      if (cards[i].getRank().ordinal() - currentCount != 1) {
+        return false;
+      }
+      currentCount = cards[i].getRank().ordinal();
+    }
+    return true;
   }
 
   private int countFifteens(Hand hand) {
