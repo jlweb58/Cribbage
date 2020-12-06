@@ -5,13 +5,13 @@ import static com.webber.cribbage.model.Suit.CLUBS;
 import static com.webber.cribbage.model.Suit.DIAMONDS;
 import static com.webber.cribbage.model.Suit.HEARTS;
 import static com.webber.cribbage.model.Suit.SPADES;
-import static org.junit.Assert.assertEquals;
-
-import org.junit.Before;
-import org.junit.Test;
+import static com.webber.cribbage.model.impl.HandCounterImpl.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.webber.cribbage.model.Card;
 import com.webber.cribbage.model.Hand;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Created: 31.12.2014 15:00:22
@@ -24,7 +24,7 @@ public class HandCounterImplTest {
   private Hand hand;
   private HandCounterImpl handCounter;
 
-  @Before
+  @BeforeEach
   public void setUp() {
     hand = new Hand(4);
     handCounter = new HandCounterImpl();
@@ -36,7 +36,7 @@ public class HandCounterImplTest {
     hand.addCard(new Card(SPADES, FOUR));
     hand.addCard(new Card(SPADES, SIX));
     hand.addCard(new Card(HEARTS, ACE));
-    assertEquals(6, handCounter.getTwoCardPermutations(hand).size());
+    assertEquals(6, getTwoCardPermutations(hand).size());
   }
 
   @Test
@@ -47,7 +47,7 @@ public class HandCounterImplTest {
     hand.addCard(new Card(SPADES, SIX));
     hand.addCard(new Card(HEARTS, ACE));
     hand.addCard(new Card(HEARTS, NINE));
-    assertEquals(10, handCounter.getTwoCardPermutations(hand).size());
+    assertEquals(10, getTwoCardPermutations(hand).size());
   }
 
   @Test
@@ -56,7 +56,7 @@ public class HandCounterImplTest {
     hand.addCard(new Card(SPADES, FOUR));
     hand.addCard(new Card(SPADES, SIX));
     hand.addCard(new Card(HEARTS, ACE));
-    assertEquals(4, handCounter.getThreeCardPermutations(hand).size());
+    assertEquals(4, getThreeCardPermutations(hand).size());
   }
   
   @Test
@@ -67,7 +67,7 @@ public class HandCounterImplTest {
     hand.addCard(new Card(SPADES, SIX));
     hand.addCard(new Card(HEARTS, ACE));
     hand.addCard(new Card(HEARTS, NINE));
-    assertEquals(10, handCounter.getThreeCardPermutations(hand).size());
+    assertEquals(10, getThreeCardPermutations(hand).size());
   }
   
   @Test
@@ -76,7 +76,7 @@ public class HandCounterImplTest {
     hand.addCard(new Card(SPADES, FOUR));
     hand.addCard(new Card(SPADES, SIX));
     hand.addCard(new Card(HEARTS, ACE));
-    assertEquals(1, handCounter.getFourCardPermutations(hand).size());
+    assertEquals(1, getFourCardPermutations(hand).size());
   }
   
   @Test
@@ -87,7 +87,7 @@ public class HandCounterImplTest {
     hand.addCard(new Card(SPADES, SIX));
     hand.addCard(new Card(HEARTS, ACE));
     hand.addCard(new Card(HEARTS, NINE));
-    assertEquals(5, handCounter.getFourCardPermutations(hand).size());
+    assertEquals(5, getFourCardPermutations(hand).size());
   }
 
   @Test
@@ -215,6 +215,15 @@ public class HandCounterImplTest {
     hand.addCard(new Card(SPADES, FOUR));
     hand.addCard(new Card(SPADES, SIX));
     assertCount(4);
+  }
+
+  @Test
+  public void testCountThreeFlush() {
+    hand.addCard(new Card(SPADES, ACE));
+    hand.addCard(new Card(HEARTS, TWO));
+    hand.addCard(new Card(SPADES, FOUR));
+    hand.addCard(new Card(SPADES, SIX));
+    assertCount(0);
   }
   
   @Test

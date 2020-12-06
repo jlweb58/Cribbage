@@ -57,7 +57,7 @@ public class HandCounterImpl implements HandCounter {
     Suit lastSuit = null;
     if (hand.getUnplayedCards().size() == 4) {
       for (Card card : hand.getUnplayedCards()) {
-        if (lastSuit != null && card.getSuit().equals(lastSuit)) {
+        if (card.getSuit().equals(lastSuit)) {
           lastSuit = card.getSuit();
         } else {
           if (lastSuit != null) {
@@ -170,7 +170,7 @@ public class HandCounterImpl implements HandCounter {
     return total;
   }
 
-  public List<Card[]> getFourCardPermutations(Hand hand) {
+  static List<Card[]> getFourCardPermutations(Hand hand) {
     List<Card[]> permutations = new ArrayList<Card[]>();
     List<Card> cards = hand.getUnplayedCards();
     int firstIndex = 0;
@@ -205,7 +205,7 @@ public class HandCounterImpl implements HandCounter {
     return permutations;
   }
 
-  public List<Card[]> getThreeCardPermutations(Hand hand) {
+  static List<Card[]> getThreeCardPermutations(Hand hand) {
     List<Card[]> permutations = new ArrayList<Card[]>();
     List<Card> cards = hand.getUnplayedCards();
     int firstIndex = 0;
@@ -234,7 +234,7 @@ public class HandCounterImpl implements HandCounter {
     return permutations;
   }
 
-  public List<Card[]> getTwoCardPermutations(Hand hand) {
+  static List<Card[]> getTwoCardPermutations(Hand hand) {
     List<Card[]> permutations = new ArrayList<Card[]>();
     List<Card> cards = hand.getUnplayedCards();
     int firstIndex = 0;
