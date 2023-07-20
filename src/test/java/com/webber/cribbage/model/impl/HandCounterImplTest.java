@@ -209,6 +209,15 @@ public class HandCounterImplTest {
   }
 
   @Test
+  public void testCountFourFives()  {
+    hand.addCard(new Card(DIAMONDS, FIVE));
+    hand.addCard(new Card(SPADES, FIVE));
+    hand.addCard(new Card(HEARTS, FIVE));
+    hand.addCard(new Card(CLUBS, FIVE));
+    assertCount(20);
+  }
+
+  @Test
   public void testCountFourFlush() {
     hand.addCard(new Card(SPADES, ACE));
     hand.addCard(new Card(SPADES, TWO));
