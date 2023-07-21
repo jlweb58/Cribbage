@@ -54,6 +54,9 @@ public class HandCounterImpl implements HandCounter {
   }
   
   private int countFlush(Hand hand) {
+    /**
+     * 4-card flush: 4 points
+     */
     Suit lastSuit = null;
     if (hand.getUnplayedCards().size() == 4) {
       for (Card card : hand.getUnplayedCards()) {
@@ -85,6 +88,9 @@ public class HandCounterImpl implements HandCounter {
   }
 
   private int countPairs(Hand hand) {
+    /**
+     * 2-card pair: 2 points
+     */
     int total = 0;
     List<Card[]> twoCards = getTwoCardPermutations(hand);
     for (Card[] pair : twoCards) {
@@ -95,7 +101,7 @@ public class HandCounterImpl implements HandCounter {
     return total;
   }
 
-  private int countRuns(Hand hand) {
+  public int countRuns(Hand hand) {
     int total = 0;
     if (hand.getUnplayedCards().size() == 5) {
       Card[] fiveCardSets = hand.getUnplayedCards().toArray(new Card[]{});
