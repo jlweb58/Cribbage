@@ -3,12 +3,6 @@ package com.webber.cribbage.model;
 import java.security.SecureRandom;
 
 
-/**
- * Created: 31.12.2014 14:45:42
- * 
- * @author John
- *
- */
 public class CardDeck {
   
   private Card[] deck;

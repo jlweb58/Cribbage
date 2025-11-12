@@ -6,12 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 
-/**
- * Created: 01.01.2015 16:25:19
- * 
- * @author John
- *
- */
 public class CardTest {
 
   @Test

@@ -1,16 +1,24 @@
 
-// Apply the java plugin to add support for Java
+
 apply plugin: 'java'
 
-test {
+wrapper { gradleVersion = "8.8" }
+
+group = "com.webber"
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+
+tasks.named("test") {
     useJUnitPlatform()
 }
 
-// In this section you declare where to find the dependencies of your project
 repositories {
-    // Use 'jcenter' for resolving your dependencies.
-    // You can declare any Maven/Ivy/file repository here.
-    jcenter()
+    mavenCentral()
 }
 
 // In this section you declare the dependencies for your production and test code

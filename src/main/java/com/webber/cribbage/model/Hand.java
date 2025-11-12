@@ -5,12 +5,6 @@ import java.util.Collections;
 import java.util.List;
 
 
-/**
- * Created: 31.12.2014 14:33:47
- * 
- * @author John
- *
- */
 public class Hand {
   private List<Card> unplayedCards = new ArrayList<Card>();
   
