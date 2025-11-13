@@ -1,5 +1,7 @@
 package com.webber.cribbage.model;
 
+import java.util.Objects;
+
 /**
  * 
  * The abstraction of a playing card for Cribbage, encapsulating suit and rank
@@ -27,7 +29,19 @@ public class Card implements Comparable<Card>{
     return rank;
   }
 
-  @Override
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Card card = (Card) o;
+        return suit == card.suit && rank == card.rank;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(suit, rank);
+    }
+
+    @Override
   public String toString() {
     return "[" + rank + " of " + suit + "]";
   }
