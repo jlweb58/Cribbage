@@ -27,6 +27,9 @@ public class PeggingRound {
     private boolean player1CanPlay = true;
     private boolean player2CanPlay = true;
 
+    private Player playerWhoCalledGo = null; // Track who called Go
+
+
     public PeggingRound(Player player1, Hand player1Hand, Player player2, Hand player2Hand, Player starterPlayer) {
         this.player1 = player1;
         this.player2 = player2;
@@ -51,15 +54,24 @@ public class PeggingRound {
         currentHand.playCard(card);
 
         int points = currentSequence.playCard(card, currentPlayer);
+
+        // Award Go point if opponent previously called Go
+        if (playerWhoCalledGo != null && playerWhoCalledGo != currentPlayer && !currentSequence.isComplete()) {
+            points += 1;
+            playerWhoCalledGo = null; // Clear the Go flag
+        }
+
         scores.put(currentPlayer, scores.get(currentPlayer) + points);
 
         PeggingResult result = new PeggingResult(currentPlayer, card, points, currentSequence.getCurrentCount());
 
         // Check if sequence is complete (reached 31)
         if (currentSequence.isComplete()) {
+            playerWhoCalledGo = null;
             startNewSequence();
             player1CanPlay = hasPlayableCards(player1Hand);
             player2CanPlay = hasPlayableCards(player2Hand);
+            switchPlayer();
         } else {
             // Switch to other player
             switchPlayer();
@@ -78,7 +90,6 @@ public class PeggingRound {
             throw new IllegalStateException("Current player has playable cards");
         }
 
-        Player otherPlayer = getOtherPlayer();
         int points = 0;
 
         // If other player also can't play, award Go to last player who played
@@ -92,15 +103,17 @@ public class PeggingRound {
             player1CanPlay = hasPlayableCards(player1Hand);
             player2CanPlay = hasPlayableCards(player2Hand);
 
-            // The player who got the Go plays first in the new sequence
+            // The player who conceded the Go plays first in the new sequence
             currentPlayer = lastPlayer;
+            playerWhoCalledGo = null; // Clear any pending Go
 
-            return new PeggingResult(lastPlayer, null, points, 0);
+            return new PeggingResult(currentPlayer, null, points, 0);
         }
 
         // Other player continues and will get Go point after their play(s)
+        playerWhoCalledGo = currentPlayer; // Track who called Go
         switchPlayer();
-        return new PeggingResult(null, null, 0, currentSequence.getCurrentCount());
+        return new PeggingResult(currentPlayer, null, 0, currentSequence.getCurrentCount());
     }
 
     public boolean isComplete() {

@@ -1,5 +1,7 @@
 package com.webber.cribbage.model;
 
+import java.util.Objects;
+
 public class Player {
     private String name;
 
@@ -16,5 +18,17 @@ public class Player {
         return "Player{" +
                 "name='" + name + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Player player = (Player) o;
+        return Objects.equals(name, player.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(name);
     }
 }
