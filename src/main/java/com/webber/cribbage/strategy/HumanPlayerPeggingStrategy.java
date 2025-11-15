@@ -9,7 +9,7 @@ import java.util.List;
  * Human player strategy - card selection is provided externally
  * This is just a placeholder; actual card selection comes from UI/API
  */
-public class HumanPlayerStrategy implements PlayerStrategy {
+public class HumanPlayerPeggingStrategy implements PlayerPeggingStrategy {
 
     private Card selectedCard;
 

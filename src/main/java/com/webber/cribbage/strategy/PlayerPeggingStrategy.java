@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Strategy interface for player decisions during pegging
  */
-public interface PlayerStrategy {
+public interface PlayerPeggingStrategy {
 
     /**
      * Choose which card to play during pegging

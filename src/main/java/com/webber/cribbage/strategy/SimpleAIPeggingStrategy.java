@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Simple AI strategy for pegging - plays lowest card that won't set up opponent
  */
-public class SimpleAIStrategy implements PlayerStrategy {
+public class SimpleAIPeggingStrategy implements PlayerPeggingStrategy {
 
     @Override
     public Card chooseCardToPlay(List<Card> availableCards, PeggingRound peggingRound) {

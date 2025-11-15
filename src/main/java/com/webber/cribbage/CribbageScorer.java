@@ -3,7 +3,6 @@ package com.webber.cribbage;
 import com.webber.cribbage.model.Card;
 import com.webber.cribbage.model.Hand;
 import com.webber.cribbage.model.Player;
-import com.webber.cribbage.model.impl.HandCounterImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +58,7 @@ public class CribbageScorer {
     private int getRunsCount() {
         Hand hand = new Hand(playedCards.size());
         playedCards.forEach(hand::addCard);
-        return new HandCounterImpl().countRuns(hand);
+        return new HandCounter().countRuns(hand);
     }
 
 

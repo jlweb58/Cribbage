@@ -1,4 +1,4 @@
-package com.webber.cribbage.model.impl;
+package com.webber.cribbage;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -6,22 +6,14 @@ import java.util.List;
 
 import com.webber.cribbage.model.Card;
 import com.webber.cribbage.model.Hand;
-import com.webber.cribbage.model.HandCounter;
 import com.webber.cribbage.model.Rank;
 import com.webber.cribbage.model.Suit;
 
-/**
- * Created: 31.12.2014 14:39:35
- * 
- * @author John
- *
- */
-public class HandCounterImpl implements HandCounter {
+public class HandCounter {
 
   private static final int FIFTEEN = 15;
   private static final int TWO = 2;
 
-  @Override
   public int getHandCount(Hand hand, Card cutCard) {
     Hand countingHand = new Hand(5);
     for (Card card : hand.getUnplayedCards()) {
@@ -33,7 +25,6 @@ public class HandCounterImpl implements HandCounter {
     return total;
   }
 
-  @Override
   public int getHandCount(Hand hand) {
     int total = 0;
     total += countFifteens(hand);
@@ -54,7 +45,7 @@ public class HandCounterImpl implements HandCounter {
   }
   
   private int countFlush(Hand hand) {
-    /**
+    /*
      * 4-card flush: 4 points
      */
     Suit lastSuit = null;
@@ -88,7 +79,7 @@ public class HandCounterImpl implements HandCounter {
   }
 
   private int countPairs(Hand hand) {
-    /**
+    /*
      * 2-card pair: 2 points
      */
     int total = 0;

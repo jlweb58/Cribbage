@@ -1,11 +1,11 @@
-package com.webber.cribbage.model.impl;
+package com.webber.cribbage;
 
 import static com.webber.cribbage.model.Rank.*;
 import static com.webber.cribbage.model.Suit.CLUBS;
 import static com.webber.cribbage.model.Suit.DIAMONDS;
 import static com.webber.cribbage.model.Suit.HEARTS;
 import static com.webber.cribbage.model.Suit.SPADES;
-import static com.webber.cribbage.model.impl.HandCounterImpl.*;
+import static com.webber.cribbage.HandCounter.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.webber.cribbage.model.Card;
@@ -19,15 +19,15 @@ import org.junit.jupiter.api.Test;
  * @author John
  *
  */
-public class HandCounterImplTest {
+public class HandCounterTest {
 
   private Hand hand;
-  private HandCounterImpl handCounter;
+  private HandCounter handCounter;
 
   @BeforeEach
   public void setUp() {
     hand = new Hand(4);
-    handCounter = new HandCounterImpl();
+    handCounter = new HandCounter();
   }
 
   @Test
