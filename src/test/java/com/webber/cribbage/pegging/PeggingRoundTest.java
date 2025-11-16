@@ -208,8 +208,8 @@ public class PeggingRoundTest {
         PeggingRound.PeggingResult peggingResult = peggingRound.declareGo();
         // Player 1 got 1 point for the go < 31
         assertEquals(1, peggingResult.getPoints());
-        // Player 1 starts the next sequence
-        assertEquals(player1, peggingResult.getPlayer());
+        // Player 2 starts the next sequence
+        assertEquals(player2, peggingResult.getPlayer());
         // Count is back to 0
         assertEquals(0, peggingResult.getNewCount());
     }
@@ -355,10 +355,11 @@ public class PeggingRoundTest {
         playableCards = peggingRound.getPlayableCards();
         assertEquals(1, playableCards.size());
         assertTrue(playableCards.contains(new Card(Suit.HEARTS, Rank.FIVE)));
-        peggingRound.playCard(new Card(Suit.HEARTS, Rank.FIVE));
+        PeggingRound.PeggingResult result = peggingRound.playCard(new Card(Suit.HEARTS, Rank.FIVE));
         playableCards = peggingRound.getPlayableCards();
         assertEquals(0, playableCards.size());
         assertTrue(peggingRound.isComplete());
+        assertEquals(1, result.getPoints());
     }
 
     @Test
@@ -377,5 +378,6 @@ public class PeggingRoundTest {
         assertEquals(2, scores.get(player1).intValue());
         assertEquals(0, scores.get(player2).intValue());
     }
+
 
 }

@@ -58,8 +58,8 @@ public class GameController {
 
         // Reset for new hand
         deck = new CardDeck();
-        deck.shuffle();
         cutCard = null;
+        crib = new Hand(CARDS_TO_CRIB * 2);
 
         // Deal 6 cards to each player
         dealCards();
@@ -67,22 +67,20 @@ public class GameController {
     }
 
     private void dealCards() {
+        state = GameState.DEALING;
+
         Hand player1Hand = new Hand(CARDS_PER_HAND);
         Hand player2Hand = new Hand(CARDS_PER_HAND);
 
-        Card[] deckCards = deck.getDeck();
-        int cardIndex = 0;
-
         // Alternate dealing to each player
         for (int i = 0; i < CARDS_PER_HAND; i++) {
-            player1Hand.addCard(deckCards[cardIndex++]);
-            player2Hand.addCard(deckCards[cardIndex++]);
+            player1Hand.addCard(deck.dealCard());
+            player2Hand.addCard(deck.dealCard());
         }
 
         player1.setDealtHand(player1Hand);
         player2.setDealtHand(player2Hand);
 
-        state = GameState.DEALING;
     }
 
     /**
@@ -120,9 +118,7 @@ public class GameController {
             throw new IllegalStateException("Not in cutting phase");
         }
 
-        Card[] deckCards = deck.getDeck();
-        // Cut card comes from remaining deck (after 12 cards dealt)
-        cutCard = deckCards[12]; // Simple implementation - could make this more realistic
+        cutCard = deck.cutCard();
 
         // Check for "his nibs" - if cut card is a jack, dealer scores 2
         if (cutCard.getRank() == Rank.JACK) {

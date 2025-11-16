@@ -36,6 +36,14 @@ public class Hand {
   public List<Card> getUnplayedCards() {
     return Collections.unmodifiableList(unplayedCards);
   }
+
+  public List<Card> getPlayedCards() {
+    return Collections.unmodifiableList(playedCards);
+  }
+
+  public int getHandSize() {
+    return handSize;
+  }
   
   public void playCard(Card card) {
     int index = unplayedCards.indexOf(card);

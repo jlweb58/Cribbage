@@ -55,10 +55,22 @@ public class PeggingRound {
 
         int points = currentSequence.playCard(card, currentPlayer);
 
+        // Track whether this play just earned a Go point
+        boolean goPointAwardedOnThisPlay = false;
+
         // Award Go point if opponent previously called Go
         if (playerWhoCalledGo != null && playerWhoCalledGo != currentPlayer && !currentSequence.isComplete()) {
             points += 1;
+            goPointAwardedOnThisPlay = true;
             playerWhoCalledGo = null; // Clear the Go flag
+        }
+
+        // If this play has exhausted all cards (end of pegging round),
+        // and the sequence did NOT reach 31, and no Go point was already
+        // awarded on this play, then award 1 point for the last card.
+        boolean roundNowComplete = isComplete();
+        if (roundNowComplete && !currentSequence.isComplete() && !goPointAwardedOnThisPlay) {
+            points += 1;
         }
 
         scores.put(currentPlayer, scores.get(currentPlayer) + points);
@@ -103,8 +115,9 @@ public class PeggingRound {
             player1CanPlay = hasPlayableCards(player1Hand);
             player2CanPlay = hasPlayableCards(player2Hand);
 
-            // The player who conceded the Go plays first in the new sequence
-            currentPlayer = lastPlayer;
+            // According to the rules, the player to the left of the last card played
+            // starts the next sequence
+            currentPlayer = getOtherPlayer(lastPlayer);
             playerWhoCalledGo = null; // Clear any pending Go
 
             return new PeggingResult(currentPlayer, null, points, 0);
@@ -177,6 +190,11 @@ public class PeggingRound {
 
     private Player getOtherPlayer() {
         return currentPlayer == player1 ? player2 : player1;
+    }
+
+    // Helper to get the opponent of a given player
+    private Player getOtherPlayer(Player player) {
+        return player == player1 ? player2 : player1;
     }
 
     private Hand getCurrentHand() {

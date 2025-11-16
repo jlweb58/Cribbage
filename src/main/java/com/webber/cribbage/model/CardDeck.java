@@ -1,43 +1,62 @@
 package com.webber.cribbage.model;
 
 import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 
 public class CardDeck {
-  
-  private Card[] deck;
-  
-  private static final int DECK_SIZE = 52;
-  
-  public CardDeck() {
-    deck = new Card[DECK_SIZE];
-    fillDeck();
-  }
-  
-  private void fillDeck() {
-    int i = 0;
-    for (Suit suit : Suit.values()) {
-      for (Rank rank : Rank.values()) {
-        Card card = new Card(suit, rank);
-        deck[i++] = card;
-      }
+
+    private final List<Card> deck = new ArrayList<>();
+    private final Random random;
+
+    public CardDeck() {
+        this (new SecureRandom ());
     }
-  }
-  
-  public void shuffle() {
-    SecureRandom random = new SecureRandom();
-    for (int i = deck.length - 1; i >= 1; i--) {
-      int j = random.nextInt(i + 1);
-      Card tmp = deck[j];
-      deck[j] = deck[i];
-      deck[i] = tmp;
+
+    // Useful for tests
+    CardDeck(long seed) {
+        this(new java.util.Random(seed));
     }
-    
-    
-  }
-  
-  public Card[] getDeck() {
-    return deck;
-  }
-  
+
+    CardDeck(Random random) {
+        this.random = random;
+        fillDeck();
+        shuffle();
+    }
+
+    public Card dealCard() {
+        if (deck.isEmpty()) {
+            throw new IllegalStateException("No cards in this deck");
+        }
+        return deck.removeFirst();
+    }
+
+    public Card cutCard() {
+        if (deck.isEmpty()) {
+            throw new IllegalStateException("No cards in this deck");
+        }
+        int index = random.nextInt(deck.size());
+        return deck.remove(index);
+    }
+
+    private void fillDeck() {
+        for (Suit suit : Suit.values()) {
+            for (Rank rank : Rank.values()) {
+                deck.add(new Card(suit, rank));
+            }
+        }
+    }
+
+    private void shuffle() {
+        Collections.shuffle(deck, random);
+    }
+
+    public int size() {
+        return deck.size();
+    }
+
+
 }
