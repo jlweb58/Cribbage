@@ -1,5 +1,7 @@
 package com.webber.cribbage.model;
 
+import lombok.Getter;
+
 import java.util.Objects;
 
 /**
@@ -10,6 +12,7 @@ import java.util.Objects;
  * @author John
  *
  */
+@Getter
 public class Card implements Comparable<Card>{
 
   private final Suit suit;
@@ -19,14 +22,6 @@ public class Card implements Comparable<Card>{
   public Card(Suit suit, Rank rank) {
     this.suit = suit;
     this.rank = rank;
-  }
-
-  public Suit getSuit() {
-    return suit;
-  }
-
-  public Rank getRank() {
-    return rank;
   }
 
     @Override

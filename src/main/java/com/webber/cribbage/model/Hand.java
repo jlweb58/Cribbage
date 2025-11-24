@@ -10,7 +10,7 @@ public class Hand {
   
   private List<Card> playedCards = new ArrayList<Card>();
   
-  private int handSize;
+  private final int handSize;
   
   
   public Hand(int handSize) {
@@ -20,12 +20,9 @@ public class Hand {
   
   public void reset() {
     unplayedCards = playedCards;
-    playedCards = new ArrayList<Card>();
+    playedCards = new ArrayList<>();
   }
-//  public void setCards(List<Card> cards) {
-//    unplayedCards = cards;
-//  }
-  
+
   public void addCard(Card card) {
     if (unplayedCards.size() >= handSize) {
       throw new IllegalArgumentException("Hand has already been dealt");
@@ -37,14 +34,6 @@ public class Hand {
     return Collections.unmodifiableList(unplayedCards);
   }
 
-  public List<Card> getPlayedCards() {
-    return Collections.unmodifiableList(playedCards);
-  }
-
-  public int getHandSize() {
-    return handSize;
-  }
-  
   public void playCard(Card card) {
     int index = unplayedCards.indexOf(card);
     if (index < 0) {

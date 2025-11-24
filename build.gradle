@@ -1,10 +1,24 @@
+buildscript {
+    ext {
+        springBootVersion = "3.4.0"
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
 
-
-apply plugin: 'java'
+apply plugin: "java"
+apply plugin: "org.springframework.boot"
+apply plugin: "io.spring.dependency-management"
+apply plugin: "application"
 
 wrapper { gradleVersion = "8.8" }
 
 group = "com.webber"
+version = "0.1.2"
 
 java {
     toolchain {
@@ -12,6 +26,39 @@ java {
     }
 }
 
+
+
+compileJava {
+    sourceCompatibility = 21
+    targetCompatibility = 21
+}
+
+dependencies {
+    implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-data-rest:${springBootVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-webflux:${springBootVersion}"
+    implementation "org.springframework.cloud:spring-cloud-context:4.1.1"
+    implementation "org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}"
+    implementation "io.jsonwebtoken:jjwt-api:0.12.3"
+    implementation "io.jsonwebtoken:jjwt-impl:0.12.3"
+    implementation "io.jsonwebtoken:jjwt-jackson:0.12.3"
+    implementation "jakarta.validation:jakarta.validation-api:3.0.1"
+
+    // Lombok for both main and test code
+    compileOnly "org.projectlombok:lombok:1.18.36"
+    annotationProcessor "org.projectlombok:lombok:1.18.36"
+    testCompileOnly "org.projectlombok:lombok:1.18.36"
+    testAnnotationProcessor "org.projectlombok:lombok:1.18.36"
+
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+    testImplementation "org.springframework.security:spring-security-test"
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher"
+    testImplementation "org.junit.jupiter:junit-jupiter-api"
+    testImplementation "org.mockito:mockito-core"
+    testImplementation "org.mockito:mockito-junit-jupiter"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
+
+}
 
 tasks.named("test") {
     useJUnitPlatform()
@@ -21,15 +68,52 @@ repositories {
     mavenCentral()
 }
 
-// In this section you declare the dependencies for your production and test code
-dependencies {
+// Modify this part of your build.gradle
+def getVersionName = { ->
+    def versionFile = file('version.properties')
+    def props = new Properties()
 
-    // The production code uses the SLF4J logging API at compile time
-    implementation 'org.slf4j:slf4j-api:1.7.25'
-    //Needed for JUnit5
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.1.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.1.1'
+    if (versionFile.exists()) {
+        props.load(new FileInputStream(versionFile))
+    } else {
+        props['major'] = '1'
+        props['minor'] = '0'
+        props['patch'] = '0'
+        props['build'] = '0'
+    }
+
+    return "${props.major}.${props.minor}.${props.patch}-${props.build}"
 }
+
+def incrementVersion = { ->
+    def versionFile = file('version.properties')
+    def props = new Properties()
+
+    if (versionFile.exists()) {
+        props.load(new FileInputStream(versionFile))
+    } else {
+        props['major'] = '1'
+        props['minor'] = '0'
+        props['patch'] = '0'
+        props['build'] = '0'
+    }
+
+    // Only increment if INCREMENT_VERSION is set to true
+    if (System.getenv('INCREMENT_VERSION') == 'true') {
+        // Increment build number
+        def build = props['build'] as int
+        props['build'] = (build + 1).toString()
+
+        // Save updated properties
+        def writer = new FileWriter(versionFile)
+        props.store(writer, null)
+    }
+
+    return "${props.major}.${props.minor}.${props.patch}-${props.build}"
+}
+
+// Always get the version, but only increment when explicitly told to
+version = incrementVersion()
 
 
 

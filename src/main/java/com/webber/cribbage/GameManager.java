@@ -7,10 +7,12 @@ import com.webber.cribbage.model.Hand;
 import com.webber.cribbage.model.Player;
 import com.webber.cribbage.model.Rank;
 import com.webber.cribbage.pegging.PeggingRound;
+import lombok.Getter;
 
 import java.util.List;
 
-public class GameController {
+@Getter
+public class GameManager {
     private static final int WINNING_SCORE = 121;
     private static final int CARDS_PER_HAND = 6;
     private static final int CARDS_TO_CRIB = 2;
@@ -39,7 +41,7 @@ public class GameController {
         GAME_OVER
     }
 
-    public GameController(Player player1, Player player2, Player initialDealer) {
+    public GameManager(Player player1, Player player2, Player initialDealer) {
         this.player1 = player1;
         this.player2 = player2;
         this.dealer = initialDealer;
@@ -228,39 +230,6 @@ public class GameController {
 
     public boolean isGameOver() {
         return state == GameState.GAME_OVER;
-    }
-
-    // Getters
-    public Player getDealer() {
-        return dealer;
-    }
-
-    public Player getNonDealer() {
-        return nonDealer;
-    }
-
-    public Card getCutCard() {
-        return cutCard;
-    }
-
-    public Hand getCrib() {
-        return crib;
-    }
-
-    public GameState getState() {
-        return state;
-    }
-
-    public GameScore getGameScore() {
-        return gameScore;
-    }
-
-    public Player getPlayer1() {
-        return player1;
-    }
-
-    public Player getPlayer2() {
-        return player2;
     }
 
     /**

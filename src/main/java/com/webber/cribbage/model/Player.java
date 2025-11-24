@@ -1,36 +1,19 @@
 package com.webber.cribbage.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Objects;
 
+@Getter
 public class Player {
     private final String name;
 
+    @Setter
     private Hand dealtHand;
-
-    private Hand crib;
 
     public Player(String name) {
         this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Hand getDealtHand() {
-        return dealtHand;
-    }
-
-    public void setDealtHand(Hand dealtHand) {
-        this.dealtHand = dealtHand;
-    }
-
-    public Hand getCrib() {
-        return crib;
-    }
-
-    public void setCrib(Hand crib) {
-        this.crib = crib;
     }
 
     @Override

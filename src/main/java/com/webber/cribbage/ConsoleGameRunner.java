@@ -18,7 +18,7 @@ public class ConsoleGameRunner {
         Player computer = new Player("Computer");
 
         // Let human be non-dealer for first hand
-        GameController controller = new GameController(human, computer, computer);
+        GameManager controller = new GameManager(human, computer, computer);
 
         System.out.println("Starting a single test hand of Cribbage...\n");
 
