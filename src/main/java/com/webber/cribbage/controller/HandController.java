@@ -18,13 +18,8 @@ import java.util.List;
 @RequestMapping("/hands")
 public class HandController {
 
-    @RequestMapping("/hello")
-    public String hello() {
-        return "Hello World!";
-    }
-
-@GetMapping(path = "/")
-public ResponseEntity<Hand> getHand() {
+    @GetMapping(path = "/")
+    public ResponseEntity<Hand> getHand() {
         CardDeck cardDeck = new CardDeck();
         Hand hand = new Hand(6);
         for (int i = 0; i < 6; i++) {
