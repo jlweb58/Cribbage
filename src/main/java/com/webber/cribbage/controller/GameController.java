@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/games")
+@RequestMapping("/games")
 // Allow requests from your frontend (adjust origin as needed)
 @CrossOrigin(origins = "http://localhost:4200")
 public class GameController {
@@ -36,4 +36,12 @@ public class GameController {
         }
         return ResponseEntity.ok(game);
     }
+
+    @PostMapping("/")
+    public ResponseEntity<Game> startGame() {
+        Game game = gameService.createGame("Human", "Computer");
+        return ResponseEntity.ok(game);
+    }
+
+
 }

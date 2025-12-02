@@ -3,6 +3,8 @@ package com.webber.cribbage;
 
 import com.webber.cribbage.model.Card;
 import com.webber.cribbage.model.CardDeck;
+import com.webber.cribbage.model.Deal;
+import com.webber.cribbage.model.Game;
 import com.webber.cribbage.model.Hand;
 import com.webber.cribbage.model.Player;
 import com.webber.cribbage.model.Rank;
@@ -26,8 +28,12 @@ public class GameManager {
 
     private final GameScore gameScore;
     private CardDeck deck;
-    private Hand crib;
     private Card cutCard;
+
+    private Deal currentDeal;
+
+    @Getter
+    private final Game game;
 
     private GameState state;
 
@@ -48,6 +54,8 @@ public class GameManager {
         this.nonDealer = (dealer == player1) ? player2 : player1;
         this.gameScore = new GameScore(player1, player2);
         this.state = GameState.INITIAL;
+        this.game = new Game();
+
     }
 
     /**
@@ -58,10 +66,12 @@ public class GameManager {
             throw new IllegalStateException("Game is over");
         }
 
+        currentDeal = new Deal(this.dealer);
+        currentDeal.setGameId(game.getId());
+
         // Reset for new hand
         deck = new CardDeck();
         cutCard = null;
-        crib = new Hand(CARDS_TO_CRIB * 2);
 
         // Deal 6 cards to each player
         dealCards();
@@ -83,12 +93,16 @@ public class GameManager {
         player1.setDealtHand(player1Hand);
         player2.setDealtHand(player2Hand);
 
+        currentDeal.setPlayer1Hand(player1Hand);
+        currentDeal.setPlayer2Hand(player2Hand);
+
     }
 
     /**
      * Player discards cards to the crib
      */
     public void discardToCrib(Player player, List<Card> cards) {
+        Hand crib = currentDeal.getCrib();
         if (state != GameState.DISCARDING_TO_CRIB) {
             throw new IllegalStateException("Not in discarding phase");
         }
@@ -186,7 +200,7 @@ public class GameManager {
         }
 
         // Dealer counts crib
-        int cribScore = scoreHand(crib, cutCard);
+        int cribScore = scoreHand(currentDeal.getCrib(), cutCard);
         gameScore.addScore(dealer, cribScore);
 
         if (gameScore.getScore(dealer) >= WINNING_SCORE) {

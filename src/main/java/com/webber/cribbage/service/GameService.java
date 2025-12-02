@@ -25,7 +25,7 @@ public class GameService {
         // Automatically start the first hand so the frontend receives dealt cards immediately
         manager.startHand();
 
-        Game game = new Game(manager);
+        Game game = new Game();
         activeGames.put(game.getId(), game);
         return game;
     }
