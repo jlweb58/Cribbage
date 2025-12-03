@@ -37,7 +37,7 @@ public class GameController {
         return ResponseEntity.ok(game);
     }
 
-    @PostMapping("/")
+    @GetMapping("/")
     public ResponseEntity<Game> startGame() {
         Game game = gameService.createGame("Human", "Computer");
         return ResponseEntity.ok(game);
