@@ -58,5 +58,10 @@ public class CardDeck {
         return deck.size();
     }
 
+    public Card removeCard(Card card) {
+        deck.remove(card);
+        return card;
+    }
+
 
 }
